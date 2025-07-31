@@ -33,7 +33,7 @@ function verifyEmail(email) {
 }
 
 app.post('/verify', async (req, res) => {
-  const { email } = req.body;
+  const { email, basicOnly = false } = req.body;
   
   // Validatie van email input
   if (!email) {
@@ -49,6 +49,20 @@ app.post('/verify', async (req, res) => {
     return res.status(400).json({ 
       success: false, 
       error: 'Ongeldig email formaat' 
+    });
+  }
+
+  // Als basicOnly=true, doe alleen basis validatie
+  if (basicOnly) {
+    return res.json({
+      success: true,
+      info: {
+        email: email,
+        isValid: true,
+        formatValid: true,
+        message: 'Email formaat is geldig (basis validatie)',
+        note: 'Geen SMTP verificatie uitgevoerd - gebruik basicOnly=false voor volledige verificatie'
+      }
     });
   }
 
@@ -79,7 +93,7 @@ app.post('/verify', async (req, res) => {
     const errorResponse = {
       success: false,
       error: error.message,
-      note: 'SMTP verificatie kan falen door firewall/ISP beperkingen. Basis email format is wel geldig.',
+      note: 'SMTP verificatie kan falen door firewall/ISP beperkingen. Gebruik basicOnly=true voor alleen format validatie.',
       email: email,
       formatValid: true
     };
