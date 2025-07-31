@@ -6,10 +6,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Email verificatie functie
+// Email verificatie functie met timeout
 function verifyEmail(email) {
   return new Promise((resolve, reject) => {
+    // Voeg timeout toe van 10 seconden
+    const timeout = setTimeout(() => {
+      reject(new Error('SMTP verificatie timeout - probeer later opnieuw'));
+    }, 10000);
+
     emailVerify.verify(email, (err, info) => {
+      clearTimeout(timeout);
       if (err) {
         // Geef meer specifieke foutmeldingen
         if (err.code === 'ECONNREFUSED') {
