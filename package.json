@@ -1,0 +1,13 @@
+{
+  "name": "smtp-verifier-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "email-verifier": "^0.3.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
